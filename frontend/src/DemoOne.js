@@ -24,8 +24,8 @@ function DemoOne() {
           </StructuredListRow>
         </StructuredListBody>
       </StructuredListWrapper>
-      <div className="my-demoone-buttons">
-        <Button className="my-demoone-buttonone">Refresh</Button>
+      <div className="my-demo-buttons">
+        <Button className="my-demo-buttonone">Refresh</Button>
         <Button kind="danger">Crash the Pod !</Button>
       </div>
     </>
