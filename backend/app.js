@@ -2,6 +2,7 @@
 // --------------------------------------------------------------------------
 // Require statements
 // --------------------------------------------------------------------------
+require("@instana/collector")();
 const http = require("http");
 const proxiedHttp = require("findhit-proxywrap").proxy(http, { strict: false });
 const express = require("express");
