@@ -1,8 +1,9 @@
-"use strict";
+if (process.env.ENABLE_INSTANA == "true") {
+  require("@instana/collector")();
+}
 // --------------------------------------------------------------------------
 // Require statements
 // --------------------------------------------------------------------------
-require("@instana/collector")();
 const http = require("http");
 const proxiedHttp = require("findhit-proxywrap").proxy(http, { strict: false });
 const express = require("express");
