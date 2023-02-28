@@ -124,11 +124,9 @@ const url =
 //app.listen(process.env.PORT || 8080, function () {
 //  console.log("INFO: app is listening on port %s", process.env.PORT || 8080);
 //});
-
-const srv = proxiedHttp.createServer(app).listen(process.env.PORT || 8080);
-console.log(
-  "INFO: The application is now listening on port " + process.env.PORT || 8080
-);
+let expressPort = process.env.PORT || 8080;
+const srv = proxiedHttp.createServer(app).listen(expressPort);
+console.log("INFO: The application is now listening on port " + expressPort);
 
 // --------------------------------------------------------------------------
 // REST API : also map the root dir to the static folder
@@ -329,17 +327,9 @@ app.get("/stopcurl", (req, res) => {
 });
 
 // --------------------------------------------------------------------------
-// Helper : fibonacci : cpu intensive function to create some load
+// REST API : stop an interval timer
 // --------------------------------------------------------------------------
-function fibo(n) {
-  if (n < 2) return 1;
-  else return fibo(n - 2) + fibo(n - 1);
-}
-
-// --------------------------------------------------------------------------
-// Helper : Calling an external API
-// --------------------------------------------------------------------------
-function fetchData() {
+app.get("/curlproxy", (req, res) => {
   const curlHosts = CURL_HOSTS.split(",");
   curlHosts.forEach(function (host) {
     console.log("Curling ", host);
@@ -353,4 +343,32 @@ function fetchData() {
         console.error("Error calling API:", error);
       });
   });
+
+  const dummy = {
+    curlfetch: "done",
+  };
+
+  res.json(dummy);
+});
+
+// --------------------------------------------------------------------------
+// Helper : fibonacci : cpu intensive function to create some load
+// --------------------------------------------------------------------------
+function fibo(n) {
+  if (n < 2) return 1;
+  else return fibo(n - 2) + fibo(n - 1);
+}
+
+// --------------------------------------------------------------------------
+// Helper : Calling an external API
+// --------------------------------------------------------------------------
+function fetchData() {
+  fetch("http://localhost:" + expressPort + "/curlproxy")
+    .then((response) => response.json())
+    .then((data) => {
+      console.log(data);
+    })
+    .catch((error) => {
+      console.error("Error calling API:", error);
+    });
 }
