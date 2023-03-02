@@ -1,5 +1,7 @@
 if (process.env.ENABLE_INSTANA == "true") {
-  require("@instana/collector")();
+  require("@instana/collector")({
+    serviceName: "NodeJS Client",
+  });
 }
 // --------------------------------------------------------------------------
 // Require statements
