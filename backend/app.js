@@ -97,6 +97,7 @@ if (MONGO_DEMO) {
 }
 console.log("INFO: CURL_HOSTS", CURL_HOSTS);
 console.log("INFO: CURL_AUTO_START", CURL_AUTO_START);
+console.log("INFO: CURL_DEBUG_DATA", CURL_DEBUG_DATA);
 
 // --------------------------------------------------------------------------
 // Setup the express server
@@ -351,7 +352,7 @@ app.get("/curlproxy", (req, res) => {
       .then((data) => {
         console.log("INFO: Call ok !");
         if (CURL_DEBUG_DATA) {
-          console.log("INFO: returning : ", data);
+          console.log("DEBUG: returning : ", data);
         }
       })
       .catch((error) => {
