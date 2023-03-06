@@ -26,6 +26,14 @@ spec:
       containers:
         - name: nodeclient
           image: nodeclient:latest
+          env:
+            - name: CURL_HOSTS
+              value: >-
+                http://localhost:8080/getEnvironment,http://quarkus-proxy:8080/api/proxy/pubfrombook
+            - name: CURL_AUTO_START
+              value: "true"
+            - name: CURL_DEBUG_DATA
+              value: "false"
           imagePullPolicy: Always
       restartPolicy: Always
       terminationGracePeriodSeconds: 30
