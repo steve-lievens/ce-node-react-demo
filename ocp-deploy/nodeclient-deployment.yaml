@@ -1,0 +1,37 @@
+kind: Deployment
+apiVersion: apps/v1
+metadata:
+  name: nodeclient
+  annotations:
+    image.openshift.io/triggers: >-
+      [{"from":{"kind":"ImageStreamTag","name":"nodeclient:latest"},"fieldPath":"spec.template.spec.containers[?(@.name==\"nodeclient\")].image"}]
+  labels:
+    app: nodeclient
+    app.kubernetes.io/component: nodeclient
+    app.kubernetes.io/instance: nodeclient
+    app.kubernetes.io/name: nodeclient
+    app.kubernetes.io/part-of: nodeclient
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: nodeclient
+  template:
+    metadata:
+      annotations:
+        alpha.image.policy.openshift.io/resolve-names: "*"
+      labels:
+        app: nodeclient
+    spec:
+      containers:
+        - name: nodeclient
+          image: nodeclient:latest
+          imagePullPolicy: Always
+      restartPolicy: Always
+      terminationGracePeriodSeconds: 30
+      dnsPolicy: ClusterFirst
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxUnavailable: 25%
+      maxSurge: 25%

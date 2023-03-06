@@ -3,6 +3,7 @@ if (process.env.ENABLE_INSTANA == "true") {
     serviceName: "NodeJS Client",
   });
 }
+
 // --------------------------------------------------------------------------
 // Require statements
 // --------------------------------------------------------------------------
@@ -13,6 +14,7 @@ const path = require("path");
 const bodyParser = require("body-parser");
 const mongoClient = require("mongodb").MongoClient;
 const os = require("os");
+const { strict } = require("assert");
 
 // --------------------------------------------------------------------------
 // global vars
@@ -73,6 +75,7 @@ if (process.env.MONGO_PW) {
 }
 
 const CURL_HOSTS = process.env.CURL_HOSTS;
+const CURL_AUTO_START = process.env.CURL_AUTO_START;
 
 // --------------------------------------------------------------------------
 // Initialization App Logging
@@ -129,6 +132,11 @@ const url =
 let expressPort = process.env.PORT || 8080;
 const srv = proxiedHttp.createServer(app).listen(expressPort);
 console.log("INFO: The application is now listening on port " + expressPort);
+if (CURL_AUTO_START) {
+  console.log("INFO: Autostarting curl ...");
+  curlStatus = true;
+  startCurl();
+}
 
 // --------------------------------------------------------------------------
 // REST API : also map the root dir to the static folder
@@ -329,20 +337,20 @@ app.get("/stopcurl", (req, res) => {
 });
 
 // --------------------------------------------------------------------------
-// REST API : stop an interval timer
+// REST API : do the api calls to the endpoints
 // --------------------------------------------------------------------------
 app.get("/curlproxy", (req, res) => {
   const curlHosts = CURL_HOSTS.split(",");
   curlHosts.forEach(function (host) {
-    console.log("Curling ", host);
+    console.log("INFO: Calling endpoint : ", host, " ...");
 
     fetch(host)
       .then((response) => response.json())
       .then((data) => {
-        console.log(data);
+        console.log("INFO: Call ok !");
       })
       .catch((error) => {
-        console.error("Error calling API:", error);
+        console.error("ERROR: Error calling API:", error);
       });
   });
 
@@ -368,9 +376,24 @@ function fetchData() {
   fetch("http://localhost:" + expressPort + "/curlproxy")
     .then((response) => response.json())
     .then((data) => {
-      console.log(data);
+      console.log("INFO: Called curlproxy internally");
     })
     .catch((error) => {
-      console.error("Error calling API:", error);
+      console.error("ERROR: Error calling curlproxy:", error);
+    });
+}
+
+// --------------------------------------------------------------------------
+// Helper : Start the curl at startup
+// --------------------------------------------------------------------------
+function startCurl() {
+  fetch("http://localhost:" + expressPort + "/startcurl")
+    .then((response) => response.json())
+    .then((data) => {
+      //console.log(data);
+      console.log("INFO: Started the curl loop !");
+    })
+    .catch((error) => {
+      console.error("ERROR: Error calling API:", error);
     });
 }
