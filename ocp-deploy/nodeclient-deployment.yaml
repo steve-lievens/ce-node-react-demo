@@ -9,7 +9,7 @@ metadata:
     app: nodeclient
     app.kubernetes.io/component: nodeclient
     app.kubernetes.io/instance: nodeclient
-    app.kubernetes.io/name: nodeclient
+    app.kubernetes.io/name: nodejs
     app.kubernetes.io/part-of: nodeclient
 spec:
   replicas: 1

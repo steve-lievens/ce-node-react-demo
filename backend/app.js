@@ -76,6 +76,7 @@ if (process.env.MONGO_PW) {
 
 const CURL_HOSTS = process.env.CURL_HOSTS;
 const CURL_AUTO_START = process.env.CURL_AUTO_START;
+const CURL_DEBUG_DATA = process.env.CURL_DEBUG_DATA;
 
 // --------------------------------------------------------------------------
 // Initialization App Logging
@@ -95,6 +96,7 @@ if (MONGO_DEMO) {
   console.log("INFO: MONGO_PW", "*********");
 }
 console.log("INFO: CURL_HOSTS", CURL_HOSTS);
+console.log("INFO: CURL_AUTO_START", CURL_AUTO_START);
 
 // --------------------------------------------------------------------------
 // Setup the express server
@@ -331,7 +333,7 @@ app.get("/stopcurl", (req, res) => {
   const intervalStatus = {
     started: curlStatus,
   };
-  console.log("INFO: Stopping the curl loop ... ");
+  console.log("INFO: the curl loop has been stopped.");
 
   res.json(intervalStatus);
 });
@@ -348,6 +350,9 @@ app.get("/curlproxy", (req, res) => {
       .then((response) => response.json())
       .then((data) => {
         console.log("INFO: Call ok !");
+        if (CURL_DEBUG_DATA) {
+          console.log("INFO: returning : ", data);
+        }
       })
       .catch((error) => {
         console.error("ERROR: Error calling API:", error);
