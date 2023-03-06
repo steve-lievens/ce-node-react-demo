@@ -35,6 +35,8 @@ spec:
               value: "true"
             - name: CURL_DEBUG_DATA
               value: "false"
+            - name: ENABLE_INSTANA
+              value: "true"
           imagePullPolicy: Always
       restartPolicy: Always
       terminationGracePeriodSeconds: 30
