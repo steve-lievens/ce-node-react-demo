@@ -48,7 +48,7 @@ const WELCOME_MSG = process.env.WELCOME_MSG;
 const WELCOME_IMG = process.env.WELCOME_IMG;
 const REGION = process.env.REGION;
 const FIBO_COUNT = process.env.FIBO_COUNT;
-const MONGO_DEMO = process.env.MONGO_DEMO == "true";
+const MONGO_DEMO = process.env.MONGO_DEMO === "true";
 
 // Mongo ENV
 // Some defaults first
@@ -75,8 +75,8 @@ if (process.env.MONGO_PW) {
 }
 
 const CURL_HOSTS = process.env.CURL_HOSTS;
-const CURL_AUTO_START = process.env.CURL_AUTO_START;
-const CURL_DEBUG_DATA = process.env.CURL_DEBUG_DATA;
+const CURL_AUTO_START = process.env.CURL_AUTO_START === "true";
+const CURL_DEBUG_DATA = process.env.CURL_DEBUG_DATA === "true";
 
 // --------------------------------------------------------------------------
 // Initialization App Logging
