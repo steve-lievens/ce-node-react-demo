@@ -2,7 +2,7 @@ import { Tabs, TabList, Tab, TabPanels, TabPanel } from "@carbon/react";
 import DemoOne from "./DemoOne";
 import DemoThree from "./DemoThree";
 
-function ContentPane({ curlStatus }) {
+function ContentPane({ envData, setEnvData }) {
   return (
     <Tabs>
       <TabList aria-label="Content List" contained activation="automatic">
@@ -13,11 +13,11 @@ function ContentPane({ curlStatus }) {
       </TabList>
       <TabPanels>
         <TabPanel>
-          <DemoOne />
+          <DemoOne envData={envData} setEnvData={setEnvData} />
         </TabPanel>
         <TabPanel>TODO</TabPanel>
         <TabPanel>
-          <DemoThree curlStatus={curlStatus} />
+          <DemoThree envData={envData} setEnvData={setEnvData} />
         </TabPanel>
         <TabPanel>Tab Panel 3</TabPanel>
       </TabPanels>

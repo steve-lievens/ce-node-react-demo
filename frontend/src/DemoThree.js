@@ -1,22 +1,15 @@
-import React, { useState, useEffect } from "react";
 import { Button } from "@carbon/react";
 
-function DemoThree({ curlStatus }) {
-  console.log(curlStatus);
-  const [curlStarted, setCurlStatus] = useState(curlStatus);
-
-  useEffect(() => {
-    fetch("/getEnvironment")
-      .then((response) => response.json())
-      .then((data) => setCurlStatus(data.curlStatus));
-  }, []);
+function DemoThree({ envData, setEnvData }) {
+  console.log("INFO : DemoThree.js incoming envData : ", envData);
 
   function handleStartCurl() {
     fetch("/startcurl")
       .then((response) => response.json())
       .then((data) => {
-        setCurlStatus(data.started);
-        console.log("Curl started. Startstatus : ", data.started);
+        console.log("INFO : Curl started. Startstatus : ", data.started);
+        envData.curlStatus = data.started;
+        setEnvData({ ...envData }); // destructuring the object, otherwise it does not trigger a re-render as it passes by reference
       })
       .catch((error) => console.error(error));
   }
@@ -25,8 +18,9 @@ function DemoThree({ curlStatus }) {
     fetch("/stopcurl")
       .then((response) => response.json())
       .then((data) => {
-        setCurlStatus(data.started);
-        console.log("Curl stopped. Startstatus : ", data.started);
+        console.log("INFO : Curl stopped. Startstatus : ", data.started);
+        envData.curlStatus = data.started;
+        setEnvData({ ...envData }); // destructuring the object, otherwise it does not trigger a re-render as it passes by reference
       })
       .catch((error) => console.error(error));
   }
@@ -41,16 +35,22 @@ function DemoThree({ curlStatus }) {
         <Button
           kind="danger"
           className="my-demo-buttonone"
-          disabled={curlStarted}
+          disabled={envData.curlStatus}
           onClick={handleStartCurl}
         >
           Start the CURL
         </Button>
-        <Button disabled={!curlStarted} onClick={handleStopCurl}>
+        <Button
+          className="my-demo-buttonone"
+          disabled={!envData.curlStatus}
+          onClick={handleStopCurl}
+        >
           Stop the CURL
         </Button>
       </div>
-      <div>The Curl loop is now {curlStarted ? "started." : "stopped."}</div>
+      <div>
+        The Curl loop is now {envData.curlStatus ? "started." : "stopped."}
+      </div>
     </>
   );
 }

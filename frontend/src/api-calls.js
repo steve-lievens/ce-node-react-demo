@@ -1,10 +1,10 @@
 export async function getEnvironment() {
   try {
-    console.log("getEnvironment : start");
+    console.log("INFO : api-calls.js getEnvironment : start");
     const response = await fetch("/getEnvironment");
-    console.log("getEnvironment : end");
+    console.log("INFO : api-calls.js getEnvironment : end");
     return await response.json();
   } catch (error) {
-    return [];
+    return {};
   }
 }

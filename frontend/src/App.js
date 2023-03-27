@@ -6,23 +6,28 @@ import React, { useEffect, useState } from "react";
 import { getEnvironment } from "./api-calls";
 
 function App() {
-  const [curlStatus, setCurlStatus] = useState(false);
+  //const [curlStatus, setCurlStatus] = useState(false);
+  const [envData, setEnvData] = useState({});
 
   useEffect(function () {
     async function getEnv() {
       const data = await getEnvironment();
-      console.log(data);
-      setCurlStatus(data.curlStatus);
-      console.log("curlStatus is set to ", data.curlStatus);
+      console.log("INFO : App.js data from get Environment : ", data);
+      //setCurlStatus(data.curlStatus);
+      setEnvData(data);
+      //console.log("curlStatus is set to ", data.curlStatus);
+
+      // Set the title in the browser bar
+      document.title = data.client_title;
     }
-    console.log("Getting the environment variables.");
+    console.log("INFO : App.js - Getting the environment variables.");
     getEnv();
   }, []);
 
   return (
     <>
       <Header />
-      <Page curlStatus={curlStatus} />
+      <Page envData={envData} setEnvData={setEnvData} />
     </>
   );
 }
@@ -38,12 +43,12 @@ function Header() {
   );
 }
 
-function Page({ curlStatus }) {
+function Page({ envData, setEnvData }) {
   return (
     <>
       <div className="my-infopane">
         <InfoPane />
-        <ContentPane curlStatus={curlStatus} />
+        <ContentPane envData={envData} setEnvData={setEnvData} />
       </div>
     </>
   );

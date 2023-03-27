@@ -3,7 +3,7 @@ apiVersion: apps/v1
 metadata:
   name: nodeclient
   annotations:
-    app.openshift.io/connects-to: '[{"apiVersion":"apps/v1","kind":"Deployment","name":"quarkus-proxy"}]'
+    app.openshift.io/connects-to: '[{"apiVersion":"apps/v1","kind":"Deployment","name":"quarkus-proxy-native"}]'
     image.openshift.io/triggers: >-
       [{"from":{"kind":"ImageStreamTag","name":"nodeclient:latest"},"fieldPath":"spec.template.spec.containers[?(@.name==\"nodeclient\")].image"}]
   labels:
@@ -30,7 +30,7 @@ spec:
           env:
             - name: CURL_HOSTS
               value: >-
-                http://localhost:8080/getEnvironment,http://quarkus-proxy:8080/api/proxy/pubfrombook
+                http://localhost:8080/getEnvironment,http://quarkus-proxy-native:8080/api/proxy/pubfrombook
             - name: CURL_AUTO_START
               value: "true"
             - name: CURL_DEBUG_DATA
