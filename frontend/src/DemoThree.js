@@ -1,4 +1,4 @@
-import { Button, CodeSnippet } from "@carbon/react";
+import { Button, CodeSnippet, Tile } from "@carbon/react";
 import React, { useState } from "react";
 
 function DemoThree({ envData, setEnvData }) {
@@ -20,7 +20,7 @@ function DemoThree({ envData, setEnvData }) {
       .then((response) => response.json())
       .then((data) => {
         console.log("INFO : curlProxy returned : ", data);
-        const myJSON = JSON.stringify(data);
+        const myJSON = JSON.stringify(data, null, 2);
         setcurlData(myJSON);
       })
       .catch((error) => console.error(error));
@@ -40,32 +40,34 @@ function DemoThree({ envData, setEnvData }) {
 
   return (
     <>
-      <div>
-        This will trigger a loop that will curl a REST api endpoint every 5
-        seconds.
-      </div>
-      <div className="my-demo-buttons">
-        <Button
-          kind="danger"
-          className="my-demo-buttonone"
-          disabled={envData.curlStatus}
-          onClick={handleStartCurl}
-        >
-          Start the CURL
-        </Button>
-        <Button
-          className="my-demo-buttonone"
-          disabled={!envData.curlStatus}
-          onClick={handleStopCurl}
-        >
-          Stop the CURL
-        </Button>
-      </div>
-      <div>
-        The Curl loop has now{" "}
-        {envData.curlStatus ? "started and returning " : "stopped."}
-      </div>
-      <CodeSnippet type="multi">{curlData.toString()}</CodeSnippet>
+      <Tile light>
+        <div>
+          This will trigger a loop that will curl a REST api endpoint every 5
+          seconds.
+        </div>
+        <div className="my-demo-buttons">
+          <Button
+            kind="danger"
+            className="my-demo-buttonone"
+            disabled={envData.curlStatus}
+            onClick={handleStartCurl}
+          >
+            Start the CURL
+          </Button>
+          <Button
+            className="my-demo-buttonone"
+            disabled={!envData.curlStatus}
+            onClick={handleStopCurl}
+          >
+            Stop the CURL
+          </Button>
+        </div>
+        The Curl loop is now{" "}
+        {envData.curlStatus ? "running and returning : " : "stopped."}
+      </Tile>
+      <CodeSnippet type="multi" wrapText="true">
+        {curlData.toString()}
+      </CodeSnippet>
     </>
   );
 }

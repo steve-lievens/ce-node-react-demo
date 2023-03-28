@@ -352,7 +352,7 @@ app.get("/curlproxy", async (req, res) => {
     await fetch(curlHosts[index])
       .then((response) => response.json())
       .then((data) => {
-        let propName = "data" + index.toString();
+        let propName = "CurlHost" + (index + 1).toString();
         console.log("INFO: Call ok !");
         returnData[propName] = data;
         if (CURL_DEBUG_DATA) {
