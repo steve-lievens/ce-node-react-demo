@@ -1,7 +1,10 @@
-import { Button } from "@carbon/react";
+import { Button, CodeSnippet } from "@carbon/react";
+import React, { useState } from "react";
 
 function DemoThree({ envData, setEnvData }) {
   console.log("INFO : DemoThree.js incoming envData : ", envData);
+
+  const [curlData, setcurlData] = useState("");
 
   function handleStartCurl() {
     fetch("/startcurl")
@@ -10,6 +13,15 @@ function DemoThree({ envData, setEnvData }) {
         console.log("INFO : Curl started. Startstatus : ", data.started);
         envData.curlStatus = data.started;
         setEnvData({ ...envData }); // destructuring the object, otherwise it does not trigger a re-render as it passes by reference
+      })
+      .catch((error) => console.error(error));
+
+    fetch("/curlproxy")
+      .then((response) => response.json())
+      .then((data) => {
+        console.log("INFO : curlProxy returned : ", data);
+        const myJSON = JSON.stringify(data);
+        setcurlData(myJSON);
       })
       .catch((error) => console.error(error));
   }
@@ -21,6 +33,7 @@ function DemoThree({ envData, setEnvData }) {
         console.log("INFO : Curl stopped. Startstatus : ", data.started);
         envData.curlStatus = data.started;
         setEnvData({ ...envData }); // destructuring the object, otherwise it does not trigger a re-render as it passes by reference
+        setcurlData("");
       })
       .catch((error) => console.error(error));
   }
@@ -49,8 +62,10 @@ function DemoThree({ envData, setEnvData }) {
         </Button>
       </div>
       <div>
-        The Curl loop is now {envData.curlStatus ? "started." : "stopped."}
+        The Curl loop has now{" "}
+        {envData.curlStatus ? "started and returning " : "stopped."}
       </div>
+      <CodeSnippet type="multi">{curlData.toString()}</CodeSnippet>
     </>
   );
 }

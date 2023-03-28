@@ -6,16 +6,13 @@ import React, { useEffect, useState } from "react";
 import { getEnvironment } from "./api-calls";
 
 function App() {
-  //const [curlStatus, setCurlStatus] = useState(false);
   const [envData, setEnvData] = useState({});
 
   useEffect(function () {
     async function getEnv() {
       const data = await getEnvironment();
       console.log("INFO : App.js data from get Environment : ", data);
-      //setCurlStatus(data.curlStatus);
       setEnvData(data);
-      //console.log("curlStatus is set to ", data.curlStatus);
 
       // Set the title in the browser bar
       document.title = data.client_title;

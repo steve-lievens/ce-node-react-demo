@@ -342,15 +342,19 @@ app.get("/stopcurl", (req, res) => {
 // --------------------------------------------------------------------------
 // REST API : do the api calls to the endpoints
 // --------------------------------------------------------------------------
-app.get("/curlproxy", (req, res) => {
+app.get("/curlproxy", async (req, res) => {
   const curlHosts = CURL_HOSTS.split(",");
-  curlHosts.forEach(function (host) {
-    console.log("INFO: Calling endpoint : ", host, " ...");
+  let returnData = {};
 
-    fetch(host)
+  for (let index = 0; index < curlHosts.length; index++) {
+    console.log("INFO: Calling endpoint : ", curlHosts[index], " ...");
+
+    await fetch(curlHosts[index])
       .then((response) => response.json())
       .then((data) => {
+        let propName = "data" + index.toString();
         console.log("INFO: Call ok !");
+        returnData[propName] = data;
         if (CURL_DEBUG_DATA) {
           console.log("DEBUG: returning : ", data);
         }
@@ -358,13 +362,10 @@ app.get("/curlproxy", (req, res) => {
       .catch((error) => {
         console.error("ERROR: Error calling API:", error);
       });
-  });
+  }
 
-  const dummy = {
-    curlfetch: "done",
-  };
-
-  res.json(dummy);
+  console.log("INFO: returning from curlproxy");
+  res.json(returnData);
 });
 
 // --------------------------------------------------------------------------
