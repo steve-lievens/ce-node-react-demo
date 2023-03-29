@@ -1,5 +1,6 @@
 import { Tabs, TabList, Tab, TabPanels, TabPanel } from "@carbon/react";
 import DemoOne from "./DemoOne";
+import DemoTwo from "./DemoTwo";
 import DemoThree from "./DemoThree";
 
 function ContentPane({ envData, setEnvData }) {
@@ -15,7 +16,9 @@ function ContentPane({ envData, setEnvData }) {
         <TabPanel>
           <DemoOne envData={envData} setEnvData={setEnvData} />
         </TabPanel>
-        <TabPanel>TODO</TabPanel>
+        <TabPanel>
+          <DemoTwo envData={envData} setEnvData={setEnvData} />
+        </TabPanel>
         <TabPanel>
           <DemoThree envData={envData} setEnvData={setEnvData} />
         </TabPanel>
