@@ -1,0 +1,147 @@
+{
+  "event": { "name": "message_processed" },
+  "options": {},
+  "payload": {
+    "output": {
+      "debug": {
+        "nodes_visited": [
+          {
+            "dialog_node": "node_3_1645613089856",
+            "title": "Bepalen schilderij",
+            "conditions": "@schilderij",
+            "visit_reason": "branch_start"
+          },
+          {
+            "dialog_node": "handler_10_1645697047884",
+            "title": null,
+            "conditions": "@schilderij"
+          },
+          {
+            "dialog_node": "response_10_1646141438991",
+            "title": null,
+            "conditions": "@schilderij:(Schreeuwend kind)"
+          },
+          {
+            "dialog_node": "node_3_1645613089856",
+            "title": "Bepalen schilderij",
+            "conditions": "@schilderij",
+            "visit_reason": "branch_start"
+          }
+        ],
+        "turn_events": [
+          {
+            "event": "node_visited",
+            "source": {
+              "dialog_node": "node_3_1645613089856",
+              "title": "Bepalen schilderij",
+              "condition": "@schilderij"
+            },
+            "reason": "branch_start"
+          },
+          {
+            "event": "node_visited",
+            "source": {
+              "dialog_node": "handler_10_1645697047884",
+              "title": null,
+              "condition": "@schilderij"
+            }
+          },
+          {
+            "event": "node_visited",
+            "source": {
+              "dialog_node": "response_10_1646141438991",
+              "title": null,
+              "condition": "@schilderij:(Schreeuwend kind)"
+            }
+          },
+          {
+            "event": "node_visited",
+            "source": {
+              "dialog_node": "node_3_1645613089856",
+              "title": "Bepalen schilderij",
+              "condition": "@schilderij"
+            },
+            "reason": "branch_start"
+          }
+        ],
+        "log_messages": []
+      },
+      "intents": [
+        {
+          "intent": "zoeken-in-discovery",
+          "confidence": 0.4870675206184387,
+          "skill": "main skill"
+        }
+      ],
+      "entities": [
+        {
+          "entity": "schilderij",
+          "location": [0, 16],
+          "value": "Schreeuwend kind",
+          "confidence": 1,
+          "skill": "main skill"
+        }
+      ],
+      "generic": [
+        {
+          "response_type": "text",
+          "text": "Leuk dat je meer wilt weten over het Schreeuwend kind. Wat kan ik je hierover vertellen?"
+        }
+      ]
+    },
+    "user_id": "anonymous_IBMuid-27bd4ff6-b4f0-4769-a8ef-e7eee5f25b1f",
+    "context": {
+      "global": {
+        "system": {
+          "session_start_time": "2023-04-26T12:25:09.517Z",
+          "user_id": "anonymous_IBMuid-27bd4ff6-b4f0-4769-a8ef-e7eee5f25b1f",
+          "timezone": "Europe/Brussels",
+          "turn_count": 2,
+          "state": "eyJpZCI6IjgwYzUyYWZmLTQxODQtNGZlMS1hNTA1LWViZWU4Nzg2YTRkNSIsIm5hbWUiOiJkcmFmdCIsInNraWxscyI6W3siY29uZmlnIjp7ImFjdGlvbnMiOmZhbHNlLCJ3b3Jrc3BhY2VfaWQiOiIwODA2ZGIzOS05MDEwLTQzNTctYmUyZS03YzE3ZmNhZmI3ZTIiLCJza2lsbF9yZWZlcmVuY2VfaWQiOm51bGx9LCJkaXNhYmxlZCI6ZmFsc2UsImxhbmd1YWdlIjoibmwiLCJza2lsbF90eXBlIjoiZGlhbG9nIiwic2tpbGxfcmVmZXJlbmNlIjoibWFpbiBza2lsbCIsInNraWxsX3NuYXBzaG90X2lkIjpudWxsLCJza2lsbF9zbmFwc2hvdF9uYW1lIjpudWxsLCJ3b3JrZXJfZGVmaW5pdGlvbl9pZCI6IjA4MDZkYjM5LTkwMTAtNDM1Ny1iZTJlLTdjMTdmY2FmYjdlMiJ9LHsiY29uZmlnIjp7Im1lc3NhZ2UiOm51bGwsInZlcnNpb24iOiIyMDE4LTEyLTAzIiwiaGlnaGxpZ2h0IjpudWxsLCJpbnN0YW5jZV9pZCI6bnVsbCwiY29sbGVjdGlvbl9pZCI6bnVsbCwiZGlzY292ZXJ5X3VybCI6bnVsbCwiZXJyb3JfbWVzc2FnZSI6bnVsbCwiZW52aXJvbm1lbnRfaWQiOm51bGwsInJlc3VsdHNfcGVyX3BhZ2UiOm51bGwsIm1heF90b3RhbF9yZXN1bHRzIjpudWxsLCJub19yZXN1bHRfbWVzc2FnZSI6bnVsbCwicGFnaW5hdGlvbl9lbmFibGVkIjpmYWxzZSwic2NoZW1hX21hcHBpbmdfdXJsIjpudWxsLCJtYXhfcHJpbWFyeV9yZXN1bHRzIjpudWxsLCJzY2hlbWFfbWFwcGluZ19ib2R5IjpudWxsLCJiYXNpY19hdXRoZW50aWNhdGlvbiI6bnVsbCwic2NoZW1hX21hcHBpbmdfdGl0bGUiOm51bGx9LCJkaXNhYmxlZCI6dHJ1ZSwibGFuZ3VhZ2UiOiJ4eCIsInNraWxsX3R5cGUiOiJzZWFyY2giLCJza2lsbF9yZWZlcmVuY2UiOiJzZWFyY2ggc2tpbGwiLCJza2lsbF9zbmFwc2hvdF9pZCI6bnVsbCwic2tpbGxfc25hcHNob3RfbmFtZSI6bnVsbCwid29ya2VyX2RlZmluaXRpb25faWQiOiJmODJjYTI2NC02NWY2LTRmYTEtYWRhMS03YjY0M2ZhZTlkZTYifSx7ImNvbmZpZyI6eyJhY3Rpb25zIjp0cnVlLCJ3b3Jrc3BhY2VfaWQiOiJmZWYyZTM4OS03NThjLTQ2YTUtOTYwYS1jNGY4NTRlZTY2MGQiLCJza2lsbF9yZWZlcmVuY2VfaWQiOm51bGx9LCJkaXNhYmxlZCI6ZmFsc2UsImxhbmd1YWdlIjoibmwiLCJza2lsbF90eXBlIjoiYWN0aW9uIiwic2tpbGxfcmVmZXJlbmNlIjoiYWN0aW9ucyBza2lsbCIsInNraWxsX3NuYXBzaG90X2lkIjpudWxsLCJza2lsbF9zbmFwc2hvdF9uYW1lIjpudWxsLCJ3b3JrZXJfZGVmaW5pdGlvbl9pZCI6ImZlZjJlMzg5LTc1OGMtNDZhNS05NjBhLWM0Zjg1NGVlNjYwZCJ9XSwibGFuZ3VhZ2UiOiJubCIsInRlbmFudF9pZCI6IjZlZjhiYTJkLTk5N2QtNDY2Yy05Y2Q3LTlmMDRiYTIyMTZmNiIsImVudmlyb25tZW50IjoiZHJhZnQiLCJkZWZhdWx0X2luc3RhbmNlIjp0cnVlLCJkaXNhYmxlX2ZhbGxiYWNrIjp0cnVlLCJhZ2VudF9kZWZpbml0aW9uX2lkIjoiODBjNTJhZmYtNDE4NC00ZmUxLWE1MDUtZWJlZTg3ODZhNGQ1IiwicGFyZW50X2Fzc2lzdGFudF9pZCI6IjUyOGM3N2ZhLWYyYjYtNGIwYy1hZTE5LWJlMDFjYzRlZGI0NyJ9"
+        },
+        "session_id": "6deee242-f595-4bc1-b021-8b67e17dfa21"
+      },
+      "integrations": {
+        "chat": {
+          "browser_info": {
+            "browser_name": "chrome",
+            "browser_version": "112.0.0",
+            "browser_OS": "Mac OS",
+            "language": "nl-NL",
+            "page_url": "http://localhost:3001/indexmuseum.html",
+            "screen_resolution": "width: 1728, height: 1117",
+            "user_agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/112.0.0.0 Safari/537.36",
+            "client_ip_address": "78.21.155.108",
+            "ip_address_list": [
+              "78.21.155.108",
+              " 2.17.196.142",
+              "10.85.155.121",
+              " 172.30.155.140"
+            ]
+          }
+        },
+        "channel": {
+          "name": "Web chat",
+          "private": {
+            "user": {
+              "id": "anonymous_IBMuid-27bd4ff6-b4f0-4769-a8ef-e7eee5f25b1f"
+            }
+          }
+        }
+      },
+      "skills": {
+        "actions skill": { "system": {}, "user_defined": {} },
+        "main skill": {
+          "user_defined": {
+            "naam": "Steve",
+            "language": "nl",
+            "schilderij": "Schreeuwend kind"
+          },
+          "system": {
+            "state": "eyJzZXNzaW9uX3N0YXJ0X3RpbWUiOiIyMDIzLTA0LTI2VDEyOjI1OjA5LjUxN1oiLCJzZXNzaW9uX2lkIjoiNmRlZWUyNDItZjU5NS00YmMxLWIwMjEtOGI2N2UxN2RmYTIxIiwic2tpbGxfcmVmZXJlbmNlIjoibWFpbiBza2lsbCIsImFzc2lzdGFudF9pZCI6IjgwYzUyYWZmLTQxODQtNGZlMS1hNTA1LWViZWU4Nzg2YTRkNSIsImluaXRpYWxpemVkIjp0cnVlLCJkaWFsb2dfc3RhY2siOlt7ImRpYWxvZ19ub2RlIjoibm9kZV8zXzE2NDU2MTMwODk4NTYifV0sIl9ub2RlX291dHB1dF9tYXAiOnsiV2Vsa29tIjp7IjAiOlswXSwiMSI6WzAsMCwxLDJdfSwibm9kZV81XzE2NDU3MDU5NDA2ODAiOnsiMCI6WzBdfSwicmVzcG9uc2VfMTBfMTY0NjE0MTQzODk5MSI6eyIwIjpbMF19fSwibGFzdF9icmFuY2hfbm9kZSI6Im5vZGVfM18xNjQ1NjEzMDg5ODU2In0="
+          }
+        }
+      }
+    }
+  }
+}

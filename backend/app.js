@@ -15,6 +15,9 @@ const bodyParser = require("body-parser");
 const mongoClient = require("mongodb").MongoClient;
 const os = require("os");
 const { strict } = require("assert");
+let rp = require("request-promise");
+let _ = require("lodash");
+const CloudantSDK = require("@cloudant/cloudant");
 
 // --------------------------------------------------------------------------
 // global vars
@@ -49,6 +52,13 @@ const WELCOME_IMG = process.env.WELCOME_IMG;
 const REGION = process.env.REGION;
 const FIBO_COUNT = process.env.FIBO_COUNT;
 const MONGO_DEMO = process.env.MONGO_DEMO === "true";
+const WATSON_LANGUAGE_TRANSLATOR_URL =
+  process.env.WATSON_LANGUAGE_TRANSLATOR_URL;
+const WATSON_LANGUAGE_TRANSLATOR_APIKEY =
+  process.env.WATSON_LANGUAGE_TRANSLATOR_APIKEY;
+const WATSON_LANGUAGE_DEFAULT = process.env.WATSON_LANGUAGE_DEFAULT;
+const CLOUDANT_URL = process.env.CLOUDANT_URL;
+const CLOUDANT_APIKEY = process.env.CLOUDANT_APIKEY;
 
 // Mongo ENV
 // Some defaults first
@@ -98,6 +108,17 @@ if (MONGO_DEMO) {
 console.log("INFO: CURL_HOSTS", CURL_HOSTS);
 console.log("INFO: CURL_AUTO_START", CURL_AUTO_START);
 console.log("INFO: CURL_DEBUG_DATA", CURL_DEBUG_DATA);
+console.log(
+  "INFO: WATSON_LANGUAGE_TRANSLATOR_APIKEY",
+  WATSON_LANGUAGE_TRANSLATOR_APIKEY
+);
+console.log(
+  "INFO: WATSON_LANGUAGE_TRANSLATOR_URL",
+  WATSON_LANGUAGE_TRANSLATOR_URL
+);
+console.log("INFO: WATSON_LANGUAGE_DEFAULT", WATSON_LANGUAGE_DEFAULT);
+console.log("INFO: CLOUDANT_URL", CLOUDANT_URL);
+console.log("INFO: CLOUDANT_APIKEY", "*******");
 
 // --------------------------------------------------------------------------
 // Setup the express server
@@ -112,6 +133,7 @@ const urlencodedParser = bodyParser.urlencoded({
 
 // serve the files out of ./public as our main files
 app.use(express.static(path.join(__dirname, "../frontend/build")));
+app.use(express.static(path.join(__dirname, "/public")));
 
 // Setup MongoDB URL
 const url =
@@ -312,6 +334,157 @@ app.post("/", jsonParser, function (req, res) {
 });
 
 // --------------------------------------------------------------------------
+// REST API : Watson Assistant Pre-Message Webhook
+// --------------------------------------------------------------------------
+app.post("/wa_pre_translate", jsonParser, function (req, res) {
+  var message = req.body;
+  console.log("INFO: Receiving event from Watson Assistant - Pre Message");
+  //console.log(JSON.stringify(message));
+  let incomingText = message.payload.input.text;
+  console.log("INFO: Incoming message : ", incomingText);
+
+  if (incomingText.startsWith("***")) {
+    console.log("INFO: Incoming text starts with ***, simply returning");
+    res.json(message);
+    return;
+  }
+
+  if (incomingText !== "") {
+    const options = {
+      method: "POST",
+      url: WATSON_LANGUAGE_TRANSLATOR_URL + "/v3/identify?version=2018-05-01",
+      auth: {
+        username: "apikey",
+        password: WATSON_LANGUAGE_TRANSLATOR_APIKEY,
+      },
+      headers: {
+        "Content-Type": "text/plain",
+      },
+      body: [incomingText],
+      json: true,
+    };
+    return rp(options).then((res2) => {
+      const confidence = _.get(res2, "languages[0].confidence");
+      console.log("INFO: Language confidence is " + confidence);
+      let language =
+        message.payload.context.skills["main skill"].user_defined["language"];
+
+      // Disabled for now as the language is set by the user preference at bot start.
+      // If you don't know the language at start, set it by uncommenting below
+      /*
+      if (confidence > 0.5) {
+        language = _.get(res2, "languages[0].language");
+        _.set(
+          message,
+          'payload.context.skills["main skill"].user_defined["language"]',
+          language
+        );
+      }
+      */
+
+      console.log("INFO: Language used : ", language);
+
+      if (language !== WATSON_LANGUAGE_DEFAULT) {
+        const options = {
+          method: "POST",
+          url:
+            WATSON_LANGUAGE_TRANSLATOR_URL + "/v3/translate?version=2018-05-01",
+          auth: {
+            username: "apikey",
+            password: WATSON_LANGUAGE_TRANSLATOR_APIKEY,
+          },
+          body: {
+            text: [message.payload.input.text],
+            target: WATSON_LANGUAGE_DEFAULT,
+            source: language,
+          },
+          json: true,
+        };
+        return rp(options)
+          .then((res2) => {
+            console.log("INFO: Translating incoming message ...");
+            message.payload.context.skills["main skill"].user_defined[
+              "original_input"
+            ] = message.payload.input.text;
+            message.payload.input.text = res2.translations[0].translation;
+            console.log(
+              "INFO: Returning translated input : ",
+              message.payload.input.text
+            );
+
+            res.json(message);
+          })
+          .catch((error) => {
+            console.log(
+              "WARNING: Translation failed, returning original to WA"
+            );
+            console.log("WARNING: ", error);
+
+            res.json(message);
+          });
+      } else {
+        console.log(
+          "INFO: Default language detected, returning original message"
+        );
+        res.json(message);
+      }
+    });
+  } else {
+    console.log(
+      "INFO: Incoming text was blank, no language detected, simply returning"
+    );
+    res.json(message);
+  }
+});
+
+// --------------------------------------------------------------------------
+// REST API : Watson Assistant Post-Message Webhook
+// --------------------------------------------------------------------------
+app.post("/wa_post_translate", jsonParser, function (req, res) {
+  let params = req.body;
+  console.log("INFO: Receiving event from Watson Assistant - Post Message");
+  //console.log(JSON.stringify(params));
+
+  //We are going to check first in the AnswerStore DB if the text is there, otherwise we can translate it
+  if (
+    params.payload.output.generic[0].response_type === "text" &&
+    params.payload.context.skills["main skill"].user_defined
+  ) {
+    var languageCode =
+      params.payload.context.skills["main skill"].user_defined.language ||
+      WATSON_LANGUAGE_DEFAULT; //language code from the WLT identify OR by default "en" English language code to search for
+    console.log("INFO: Used languageCode = ", languageCode);
+
+    let myPromise = new Promise(function (resolve, reject) {
+      console.log(
+        "INFO: Looking for content with keys : ",
+        params.payload.output.generic
+      );
+      searchCloudant(
+        params.payload.output.generic,
+        params,
+        languageCode,
+        resolve
+      );
+    });
+
+    myPromise.then(
+      function () {
+        console.log("INFO: Returning - success");
+        res.json(params);
+      },
+      function () {
+        console.log("INFO: Returning - failed");
+        res.json(params);
+      }
+    );
+  } else {
+    console.log("INFO: Unhandled situation - returning standard WA reply");
+    res.json(params);
+  }
+});
+
+// --------------------------------------------------------------------------
 // REST API : start an interval timer
 // --------------------------------------------------------------------------
 app.get("/startcurl", (req, res) => {
@@ -403,4 +576,95 @@ function startCurl() {
     .catch((error) => {
       console.error("ERROR: Error calling API:", error);
     });
+}
+
+// --------------------------------------------------------------------------
+// Helper : Combining multiple searches to Cloudant
+// --------------------------------------------------------------------------
+function searchCloudant(keys, params, languageCode, resolve) {
+  const cloudant = new CloudantSDK({
+    url: CLOUDANT_URL,
+    plugins: { iamauth: { iamApiKey: CLOUDANT_APIKEY } },
+  });
+
+  const databaseName = "mydb";
+
+  let i = 0;
+
+  const singleSearchCloudant = (searchItem) =>
+    new Promise((resolved, reject) => {
+      if (searchItem.text) {
+        cloudant
+          .use(databaseName)
+          .get(searchItem.text)
+          .then((answerUnit) => {
+            if (answerUnit) {
+              console.log("INFO: Found item in Cloudant db");
+
+              if (languageCode == "nl") {
+                params.payload.output.generic[i].text = answerUnit.nl;
+                console.log("INFO: Content = ", answerUnit.nl);
+              } else if (languageCode == "fr") {
+                params.payload.output.generic[i].text = answerUnit.fr;
+                console.log("INFO: Content = ", answerUnit.fr);
+              } else {
+                //default to "en"
+                params.payload.output.generic[i].text = answerUnit.en;
+                console.log("INFO: Content = ", answerUnit.en);
+              }
+            }
+            resolved();
+          })
+          .catch((error) => {
+            console.log("ERROR: error from DB " + error);
+            resolved();
+          });
+      } else if (searchItem.title) {
+        cloudant
+          .use(databaseName)
+          .get(searchItem.title)
+          .then((answerUnit) => {
+            if (answerUnit) {
+              console.log("INFO: Found item in Cloudant db");
+
+              if (languageCode == "nl") {
+                params.payload.output.generic[i].title = answerUnit.nl;
+                console.log("INFO: Content = ", answerUnit.nl);
+              } else if (languageCode == "fr") {
+                params.payload.output.generic[i].title = answerUnit.fr;
+                console.log("INFO: Content = ", answerUnit.fr);
+              } else {
+                //default to "en"
+                params.payload.output.generic[i].title = answerUnit.en;
+                console.log("INFO: Content = ", answerUnit.en);
+              }
+            }
+            resolved();
+          })
+          .catch((error) => {
+            console.log("ERROR: error from DB " + error);
+            resolved();
+          });
+      } else {
+        resolved();
+      }
+    });
+
+  const doAllSearches = async () => {
+    for (item of keys) {
+      console.log(
+        "INFO : Searching for key in : ",
+        item,
+        ", language : ",
+        languageCode
+      );
+      await singleSearchCloudant(item);
+      i++;
+    }
+
+    console.log("INFO : All content searches done !");
+    resolve();
+  };
+
+  doAllSearches();
 }

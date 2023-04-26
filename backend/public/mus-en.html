@@ -1,0 +1,262 @@
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <title>NodeJS Starter Application</title>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <!-- Bootstrap CSS -->
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/bootstrap@4.3.1/dist/css/bootstrap.min.css"
+      integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T"
+      crossorigin="anonymous"
+    />
+    <link rel="stylesheet" href="stylesheets/style.css" />
+  </head>
+
+  <body style="background-color: #555353">
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+      <a class="navbar-brand" href="#">Museum Assistant</a>
+      <button
+        class="navbar-toggler"
+        type="button"
+        data-toggle="collapse"
+        data-target="#navbarSupportedContent"
+        aria-controls="navbarSupportedContent"
+        aria-expanded="false"
+        aria-label="Toggle navigation"
+      >
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="navbarSupportedContent">
+        <ul class="navbar-nav mr-auto">
+          <li class="nav-item">
+            <a class="nav-link" href="#"
+              >Home <span class="sr-only">(current)</span></a
+            >
+          </li>
+          <li class="nav-item dropdown active">
+            <a
+              class="nav-link dropdown-toggle"
+              href="#"
+              id="navbarDropdown"
+              role="button"
+              data-toggle="dropdown"
+              aria-haspopup="true"
+              aria-expanded="false"
+            >
+              Verzamelingen
+            </a>
+            <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+              <a class="dropdown-item" href="#"> Mijn eerste collectie</a>
+            </div>
+          </li>
+        </ul>
+        <ul class="nav navbar-nav ml-auto">
+          <li class="nav-item dropdown active">
+            <a
+              class="nav-link dropdown-toggle"
+              href="#"
+              id="navbarDropdown"
+              role="button"
+              data-toggle="dropdown"
+              aria-haspopup="true"
+              aria-expanded="false"
+            >
+              Hallo Steve
+            </a>
+            <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+              <a class="dropdown-item" href="#"> Instellingen</a>
+              <div class="dropdown-divider"></div>
+              <a class="dropdown-item" href="#"> Afmelden</a>
+            </div>
+          </li>
+        </ul>
+      </div>
+    </nav>
+    <div
+      id="myCarousel"
+      style="padding-top: 5%"
+      class="carousel slide"
+      data-interval="false"
+    >
+      <ol class="carousel-indicators">
+        <li data-target="#myCarousel" data-slide-to="0" class="active"></li>
+        <li data-target="#myCarousel" data-slide-to="1"></li>
+        <li data-target="#myCarousel" data-slide-to="2"></li>
+        <li data-target="#myCarousel" data-slide-to="3"></li>
+        <li data-target="#myCarousel" data-slide-to="4"></li>
+      </ol>
+      <div class="carousel-inner" role="listbox">
+        <div id="Portret van een vrouw" class="carousel-item active">
+          <img
+            class="d-block rounded mx-auto"
+            style="max-height: 550px"
+            src="./images/portret-van-een-vrouw.jpg"
+            alt="Portret van een vrouw"
+          />
+        </div>
+        <div id="Schreeuwend kind" class="carousel-item">
+          <img
+            class="d-block rounded mx-auto"
+            style="max-height: 550px"
+            src="./images/schreewend-kind.png"
+            alt="Schreeuwend kind"
+          />
+        </div>
+        <div id="De avondschool" class="carousel-item">
+          <img
+            class="d-block rounded mx-auto"
+            style="max-height: 550px"
+            src="./images/de-avondschool.jpg"
+            alt="De avondschool"
+          />
+        </div>
+        <div id="Het toilet" class="carousel-item">
+          <img
+            class="d-block rounded mx-auto"
+            style="max-height: 550px"
+            src="./images/het-toilet.jpg"
+            alt="Het toilet"
+          />
+        </div>
+        <div id="Stilleven met vergulde bokaal" class="carousel-item">
+          <img
+            class="d-block rounded mx-auto"
+            style="max-height: 550px"
+            src="./images/stilleven-met-verguld-bokaal.jpg"
+            alt="Stilleven met vergulde bokaal"
+          />
+        </div>
+      </div>
+    </div>
+
+    <footer>
+      <p class="fixed-bottom text-center small">Bron: Rijksmuseum</p>
+    </footer>
+
+    <!-- Bootstrap core JavaScript
+    ================================================== -->
+    <script
+      src="https://cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.slim.min.js"
+      integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj"
+      crossorigin="anonymous"
+    ></script>
+    <script
+      src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.1/dist/js/bootstrap.bundle.min.js"
+      integrity="sha384-fQybjgWLrvvRgtW6bFlB7jaZrFsaBXjsOMm/tB9LTS58ONXgqbR9W8oWht/amnpF"
+      crossorigin="anonymous"
+    ></script>
+    <script src="./holder.min.js"></script>
+
+    <script>
+      var naam;
+
+      window.watsonAssistantChatOptions = {
+        //integrationID: "f91c4a91-cd8d-4fed-ae1f-f8404ab09bda", // The ID of this integration.
+        integrationID: "c7d50f1e-0604-40c5-88be-f69fdc87cdb8", // The ID of this integration. (Museum Assistant)
+        region: "eu-de", // The region your integration is hosted in.
+        serviceInstanceID: "6ef8ba2d-997d-466c-9cd7-9f04ba2216f6", // The ID of your service instance.
+        onLoad: function (instance) {
+          // Subscribe to the "pre:receive" event.
+          instance.on({ type: "pre:receive", handler: preReceivehandler });
+
+          // Subscribe to the "pre:receive" event.
+          instance.on({ type: "receive", handler: receivehandler });
+
+          // Subscribe to the "pre:send" event.
+          instance.on({ type: "pre:send", handler: preSendhandler });
+
+          //instance.on({ type: "window:open", handler: initPainting });
+
+          instance.render();
+        },
+      };
+
+      setTimeout(function () {
+        const t = document.createElement("script");
+        t.src =
+          "https://web-chat.global.assistant.watson.appdomain.cloud/versions/" +
+          (window.watsonAssistantChatOptions.clientVersion || "latest") +
+          "/WatsonAssistantChatEntry.js";
+        document.head.appendChild(t);
+      });
+
+      /**
+       * Following the v2 message API Response
+       * at https://cloud.ibm.com/apidocs/assistant/assistant-v2#send-user-input-to-assistant,
+       * we add some items to context.
+       */
+      function preSendhandler(event) {
+        var userName = "Steve";
+        var userLanguage = "en";
+
+        // When fetching the Welcome Node on startup, the context won't be defined, yet. If you want to add to
+        // context when fetching welcome node, you will need to define the context.
+
+        // NOTE: If you are using an actions skill, replace 'main skill' with 'actions skill'.
+
+        event.data.context.skills["main skill"] = event.data.context.skills[
+          "main skill"
+        ] || { user_defined: {} };
+
+        if (
+          event.data.context.skills["main skill"].user_defined.naam == undefined
+        ) {
+          event.data.context.skills["main skill"].user_defined.naam = userName;
+        }
+        if (
+          event.data.context.skills["main skill"].user_defined.language ==
+          undefined
+        ) {
+          event.data.context.skills["main skill"].user_defined.language =
+            userLanguage;
+        }
+      }
+
+      function preReceivehandler(event) {
+        var currId = $("div.active").attr("id");
+        var nameObj;
+        var objArray = [
+          "Portret van een vrouw, waarschijnlijk Maria Trip",
+          "Schreeuwend kind",
+          "De avondschool",
+          "Het toilet",
+          "Stilleven met vergulde bokaal",
+        ];
+
+        if (event.data.context.skills["main skill"].user_defined) {
+          if (
+            event.data.context.skills["main skill"].user_defined.schilderij &&
+            event.data.context.skills["main skill"].user_defined.schilderij !=
+              currId
+          ) {
+            nameObj =
+              event.data.context.skills["main skill"].user_defined.schilderij;
+            console.log(
+              "Switch to painting id: " +
+                objArray.indexOf(nameObj) +
+                ". Name: " +
+                nameObj
+            );
+          }
+
+          if (nameObj != undefined) {
+            $("#myCarousel").carousel(objArray.indexOf(nameObj));
+          }
+        }
+      }
+
+      function receivehandler(event) {
+        if (event.data.output.intents[0]) {
+          console.log("intent name: " + event.data.output.intents[0].intent);
+          console.log(
+            "intent confidence: " + event.data.output.intents[0].confidence
+          );
+        }
+      }
+    </script>
+  </body>
+</html>
