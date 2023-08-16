@@ -155,8 +155,8 @@
       var naam;
 
       window.watsonAssistantChatOptions = {
-        integrationID: "cf484b1d-4d92-4be9-9077-1d154508eb6a", // The ID of this integration - Live
-        //integrationID: "c7d50f1e-0604-40c5-88be-f69fdc87cdb8", // The ID of this integration - Draft
+        //integrationID: "cf484b1d-4d92-4be9-9077-1d154508eb6a", // The ID of this integration - Live
+        integrationID: "c7d50f1e-0604-40c5-88be-f69fdc87cdb8", // The ID of this integration - Draft
         region: "eu-de", // The region your integration is hosted in.
         serviceInstanceID: "6ef8ba2d-997d-466c-9cd7-9f04ba2216f6", // The ID of your service instance.
         onLoad: function (instance) {
@@ -192,6 +192,7 @@
       function preSendhandler(event) {
         var userName = "Steve";
         var userLanguage = "en";
+        var userGreeting = "Welcome";
 
         // When fetching the Welcome Node on startup, the context won't be defined, yet. If you want to add to
         // context when fetching welcome node, you will need to define the context.
@@ -213,6 +214,13 @@
         ) {
           event.data.context.skills["main skill"].user_defined.language =
             userLanguage;
+        }
+        if (
+          event.data.context.skills["main skill"].user_defined.greeting ==
+          undefined
+        ) {
+          event.data.context.skills["main skill"].user_defined.greeting =
+            userGreeting;
         }
       }
 

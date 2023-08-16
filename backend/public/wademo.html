@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <title>Colruyt Watson Assistant Demo</title>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <!-- Bootstrap CSS -->
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/bootstrap@4.3.1/dist/css/bootstrap.min.css"
+      integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T"
+      crossorigin="anonymous"
+    />
+    <link rel="stylesheet" href="stylesheets/style.css" />
+  </head>
+
+  <style>
+    body {
+      background-image: url("images/colruyt-wa-background.png");
+      background-repeat: no-repeat;
+      background-attachment: fixed;
+      background-size: 100% 100%;
+    }
+  </style>
+
+  <body>
+    <script>
+      window.watsonAssistantChatOptions = {
+        integrationID: "cd09fe9f-6619-4ac3-8613-0e687b67ab02", // The ID of this integration.
+        region: "eu-de", // The region your integration is hosted in.
+        serviceInstanceID: "cd43fb33-2eeb-43ec-b001-56e0ff1f302b", // The ID of your service instance.
+        onLoad: function (instance) {
+          instance.updateLocale("nl");
+
+          // Subscribe to the "pre:send" event.
+          instance.on({ type: "pre:send", handler: preSendhandler });
+
+          instance.render();
+        },
+      };
+      setTimeout(function () {
+        const t = document.createElement("script");
+        t.src =
+          "https://web-chat.global.assistant.watson.appdomain.cloud/versions/" +
+          (window.watsonAssistantChatOptions.clientVersion || "latest") +
+          "/WatsonAssistantChatEntry.js";
+        document.head.appendChild(t);
+      });
+
+      function preSendhandler(event) {
+        var userName = "Ivor";
+
+        // When fetching the Welcome Node on startup, the context won't be defined, yet. If you want to add to
+        // context when fetching welcome node, you will need to define the context.
+
+        // NOTE: If you are using an actions skill, replace 'main skill' with 'actions skill'.
+
+        event.data.context.skills["actions skill"] = event.data.context.skills[
+          "actions skill"
+        ] || { user_defined: {} };
+
+        if (
+          event.data.context.skills["actions skill"].user_defined.naam ==
+          undefined
+        ) {
+          event.data.context.skills["actions skill"].user_defined.naam =
+            userName;
+        }
+      }
+    </script>
+  </body>
+</html>
